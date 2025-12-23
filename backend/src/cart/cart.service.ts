@@ -82,7 +82,7 @@ export class CartService {
     return this.getCartWithItemsById(item.cartId);
   }
 
-  // Remove an item directly 
+  
   async removeItem(itemId: string) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
