@@ -1,4 +1,7 @@
-// src/app/components/CategoryGrid.tsx  (or your current path)
+// src/app/components/CategoryGrid.tsx
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 type Category = {
@@ -8,16 +11,42 @@ type Category = {
   description?: string;
 };
 
-async function getCategories(): Promise<Category[]> {
-  const res = await fetch('http://localhost:3000/categories', {
-    cache: 'no-store',
-  });
-  if (!res.ok) return [];
-  return res.json();
-}
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 
-export default async function CategoryGrid() {
-  const categories = await getCategories();
+export default function CategoryGrid() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch(`${API_BASE}/categories`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) {
+          setCategories(data);
+        }
+      } catch (e) {
+        console.error('Failed to load categories', e);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading && categories.length === 0) {
+    return null; // or a small skeleton loader if you want
+  }
 
   return (
     <section className="w-full bg-gradient-to-b from-slate-50 via-orange-50/20 to-slate-50 border-t border-slate-200/60">

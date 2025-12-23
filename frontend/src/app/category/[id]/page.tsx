@@ -68,7 +68,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         src={`http://localhost:3000${p.thumbnail}`}
                         alt={p.name}
                         fill
-                        className="object-cover"
+                        className="object-contain bg-white"
                         unoptimized
                       />
                     )}

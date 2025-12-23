@@ -1,13 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useCart } from '../hooks/useCart';
 
 export default function Navbar() {
+  const pathname = usePathname();
+  // render only on home page
+  if (pathname !== '/') {
+    return null;
+  }
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQ = searchParams.get('q') ?? '';
   const [search, setSearch] = useState(initialQ);
+
+  const { totalQuantity } = useCart();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +28,6 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40">
-      {/* Gradient bar behind glass nav */}
       <div className="h-1 w-full bg-gradient-to-r from-orange-500 via-amber-400 to-pink-500" />
 
       <nav className="backdrop-blur-xl bg-white/70 border-b border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
@@ -71,13 +80,17 @@ export default function Navbar() {
             <button className="hidden md:inline-flex items-center rounded-full px-3 py-1.5 text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition">
               Login
             </button>
-            <button className="relative inline-flex items-center rounded-full bg-slate-900 text-white px-3 py-1.5 shadow hover:bg-slate-800 transition">
+
+            <Link
+              href="/cart"
+              className="relative inline-flex items-center rounded-full bg-slate-900 text-white px-3 py-1.5 shadow hover:bg-slate-800 transition"
+            >
               <span className="text-sm mr-1.5">🛒</span>
               <span className="text-xs font-semibold">Cart</span>
               <span className="ml-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-bold">
-                0
+                {totalQuantity}
               </span>
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

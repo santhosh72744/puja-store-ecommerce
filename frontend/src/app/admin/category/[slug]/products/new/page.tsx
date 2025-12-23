@@ -29,14 +29,47 @@ export default function NewProductPage() {
   const [finishing, setFinishing] = useState('');
   const [includedItems, setIncludedItems] = useState('');
 
+  // files + previews
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  const [galleryFiles, setGalleryFiles] = useState<FileList | null>(null);
-
-  // NEW: preview URLs
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
+
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setThumbnailFile(file);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setThumbnailPreview(url);
+    } else {
+      setThumbnailPreview(null);
+    }
+  };
+
+  const clearThumbnail = () => {
+    setThumbnailFile(null);
+    setThumbnailPreview(null);
+  };
+
+  const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) {
+      setGalleryFiles([]);
+      setGalleryPreviews([]);
+      return;
+    }
+    const urls = files.map((f) => URL.createObjectURL(f));
+    setGalleryFiles((prev) => [...prev, ...files]);
+    setGalleryPreviews((prev) => [...prev, ...urls]);
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -52,15 +85,13 @@ export default function NewProductPage() {
       let thumbnailPath: string | undefined;
       let imagesPaths: string[] | undefined;
 
-      if (thumbnailFile || (galleryFiles && galleryFiles.length > 0)) {
+      if (thumbnailFile || galleryFiles.length > 0) {
         const formData = new FormData();
         if (thumbnailFile) {
           formData.append('thumbnail', thumbnailFile);
         }
-        if (galleryFiles) {
-          Array.from(galleryFiles).forEach((file) =>
-            formData.append('gallery', file),
-          );
+        if (galleryFiles.length > 0) {
+          galleryFiles.forEach((file) => formData.append('gallery', file));
         }
 
         const uploadRes = await fetch(
@@ -163,7 +194,7 @@ export default function NewProductPage() {
                   className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                   value={slug}
                   onChange={(e) => setSlug(e.target.value)}
-                  placeholder="brass-puja-thali-set-15-piece"
+                 
                   required
                 />
               </div>
@@ -300,7 +331,7 @@ export default function NewProductPage() {
               </div>
               <div>
                 <label className="block text-xs font-medium text-slate-600">
-                  Finish
+                  Finishing
                 </label>
                 <input
                   className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -319,140 +350,133 @@ export default function NewProductPage() {
                 rows={3}
                 value={includedItems}
                 onChange={(e) => setIncludedItems(e.target.value)}
-                placeholder="1 brass puja thali ...; 1 Panchapatra ...; 1 pali spoon ..."
+              
               />
             </div>
           </section>
 
           {/* images */}
-          {/* images */}
-<section className="space-y-3 rounded-xl bg-slate-50/80 p-4">
-  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-    Images
-  </p>
-  <div className="grid gap-8 md:grid-cols-2">
-    {/* Thumbnail */}
-    <div>
-      <label className="block text-xs font-medium text-slate-600">
-        Thumbnail image
-      </label>
+          <section className="space-y-3 rounded-xl bg-slate-50/80 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+              Images
+            </p>
+            <div className="grid gap-8 md:grid-cols-2">
+              {/* Thumbnail */}
+              <div>
+                <label className="block text-xs font-medium text-slate-600">
+                  Thumbnail image
+                </label>
 
-      {/* hidden real input */}
-      <input
-        id="thumbnail-input"
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => {
-          const file = e.target.files?.[0] ?? null;
-          setThumbnailFile(file);
-          if (file) {
-            const url = URL.createObjectURL(file);
-            setThumbnailPreview(url);
-          } else {
-            setThumbnailPreview(null);
-          }
-        }}
-      />
+                <input
+                  id="thumbnail-input"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleThumbnailChange}
+                />
 
-      {/* pretty button + filename */}
-      <div className="mt-1 flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => {
-            const input = document.getElementById(
-              'thumbnail-input',
-            ) as HTMLInputElement | null;
-            input?.click();
-          }}
-          className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-        >
-          Choose file
-        </button>
-        <span className="text-[11px] text-slate-500">
-          {thumbnailFile ? thumbnailFile.name : 'No file chosen'}
-        </span>
-      </div>
+                <div className="mt-1 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const input = document.getElementById(
+                        'thumbnail-input',
+                      ) as HTMLInputElement | null;
+                      input?.click();
+                    }}
+                    className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+                  >
+                    Choose file
+                  </button>
+                  <span className="text-[11px] text-slate-500">
+                    {thumbnailFile ? thumbnailFile.name : 'No file chosen'}
+                  </span>
+                </div>
 
-      {thumbnailPreview && (
-        <img
-          src={thumbnailPreview}
-          alt="Thumbnail preview"
-          className="mt-2 h-20 w-20 rounded-lg object-cover border border-slate-200"
-        />
-      )}
+                {thumbnailPreview && (
+                  <div className="relative mt-2 inline-block">
+                    <img
+                      src={thumbnailPreview}
+                      alt="Thumbnail preview"
+                      className="h-20 w-20 rounded-lg object-cover border border-slate-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={clearThumbnail}
+                      className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-[11px] font-bold text-white shadow hover:bg-red-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
 
-      <p className="mt-1 text-[11px] text-slate-500">
-        Main image shown on product card and detail page.
-      </p>
-    </div>
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Main image shown on product card and detail page.
+                </p>
+              </div>
 
-    {/* Gallery */}
-    <div>
-      <label className="block text-xs font-medium text-slate-600">
-        Gallery images
-      </label>
+              {/* Gallery */}
+              <div>
+                <label className="block text-xs font-medium text-slate-600">
+                  Gallery images
+                </label>
 
-      {/* hidden real input */}
-      <input
-        id="gallery-input"
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={(e) => {
-          const files = e.target.files;
-          setGalleryFiles(files);
-          if (!files) {
-            setGalleryPreviews([]);
-            return;
-          }
-          const urls = Array.from(files).map((f) => URL.createObjectURL(f));
-          setGalleryPreviews(urls);
-        }}
-      />
+                <input
+                  id="gallery-input"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleGalleryChange}
+                />
 
-      {/* pretty button + filenames count */}
-      <div className="mt-1 flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => {
-            const input = document.getElementById(
-              'gallery-input',
-            ) as HTMLInputElement | null;
-            input?.click();
-          }}
-          className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-        >
-          Choose files
-        </button>
-        <span className="text-[11px] text-slate-500">
-          {galleryFiles && galleryFiles.length > 0
-            ? `${galleryFiles.length} file(s) selected`
-            : 'No files chosen'}
-        </span>
-      </div>
+                <div className="mt-1 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const input = document.getElementById(
+                        'gallery-input',
+                      ) as HTMLInputElement | null;
+                      input?.click();
+                    }}
+                    className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+                  >
+                    Choose files
+                  </button>
+                  <span className="text-[11px] text-slate-500">
+                    {galleryFiles.length > 0
+                      ? `${galleryFiles.length} file(s) selected`
+                      : 'No files chosen'}
+                  </span>
+                </div>
 
-      {galleryPreviews.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-2">
-          {galleryPreviews.map((url, i) => (
-            <img
-              key={url}
-              src={url}
-              alt={`Gallery preview ${i + 1}`}
-              className="h-16 w-16 rounded-lg object-cover border border-slate-200"
-            />
-          ))}
-        </div>
-      )}
+                {galleryPreviews.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {galleryPreviews.map((url, i) => (
+                      <div key={url} className="relative inline-block">
+                        <img
+                          src={url}
+                          alt={`Gallery preview ${i + 1}`}
+                          className="h-16 w-16 rounded-lg object-cover border border-slate-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeGalleryImage(i)}
+                          className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow hover:bg-red-600"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-      <p className="mt-1 text-[11px] text-slate-500">
-        Optional extra photos (close-ups, angles, packaging).
-      </p>
-    </div>
-  </div>
-</section>
-
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Optional extra photos (close-ups, angles, packaging).
+                </p>
+              </div>
+            </div>
+          </section>
 
           <div className="flex justify-end">
             <button

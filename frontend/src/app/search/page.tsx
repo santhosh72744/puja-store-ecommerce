@@ -56,15 +56,18 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               >
                 <article className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
                   {/* image – same as category card */}
-                  <div className="relative h-56 w-full bg-slate-100">
-                    {p.thumbnail && (
-                      <img
-                        src={`http://localhost:3000${p.thumbnail}`}
-                        alt={p.name}
-                        className="h-full w-full object-cover"
-                      />
-                    )}
-                  </div>
+                  {/* image – fit thumbnail without cutting */}
+<div className="relative w-full overflow-hidden bg-slate-100 rounded-t-3xl">
+  <div className="relative w-full pt-[75%]">
+    {p.thumbnail && (
+      <img
+        src={`http://localhost:3000${p.thumbnail}`}
+        alt={p.name}
+        className="absolute inset-0 h-full w-full object-contain bg-white p-3"
+      />
+    )}
+  </div>
+</div>
 
                   {/* content – similar style */}
                   <div className="flex flex-1 flex-col px-5 pb-5 pt-4">

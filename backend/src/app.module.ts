@@ -8,7 +8,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
-import { UploadModule } from './upload/upload.module'; // ✅ NEW
+import { UploadModule } from './upload/upload.module'; 
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -36,7 +37,9 @@ import { UploadModule } from './upload/upload.module'; // ✅ NEW
     // Feature modules
     ProductsModule,
     CategoriesModule,
-    UploadModule, // ✅ add upload module here
+    UploadModule, 
+     CartModule,
+     
   ],
   controllers: [AppController],
   providers: [AppService],
