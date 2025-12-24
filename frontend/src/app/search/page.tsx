@@ -69,7 +69,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   </div>
 </div>
 
-                  {/* content – similar style */}
+               
                   <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
                     <p className="inline-flex items-center self-start rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
                       {p.stock > 0 ? 'In stock' : 'Out of stock'}
