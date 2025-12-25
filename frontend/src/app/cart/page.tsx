@@ -1,5 +1,7 @@
 'use client';
 
+import { apiUrl } from "@/app/lib/api";
+
 import Image from 'next/image';
 import { useCartContext } from '../context/CartContext';
 
@@ -15,16 +17,18 @@ export default function CartPage() {
   }
 
   const handleIncrease = async (itemId: string) => {
-    await fetch(`http://localhost:3000/cart/items/${itemId}/increase`, {
-      method: 'PATCH',
-    });
+    await fetch(apiUrl(`/cart/items/${itemId}/increase`), {
+  method: 'PATCH',
+});
+
     await reload();
   };
 
   const handleDecrease = async (itemId: string) => {
-    await fetch(`http://localhost:3000/cart/items/${itemId}/decrease`, {
-      method: 'PATCH',
-    });
+    await fetch(apiUrl(`/cart/items/${itemId}/decrease`), {
+  method: 'PATCH',
+});
+
     await reload();
   };
 
@@ -41,8 +45,9 @@ export default function CartPage() {
             {cart.items.map((item: any) => {
               const product = item.product;
               const thumbUrl = product?.thumbnail
-                ? `http://localhost:3000${product.thumbnail}`
-                : null;
+  ? apiUrl(product.thumbnail)
+  : null;
+
 
               return (
                 <article

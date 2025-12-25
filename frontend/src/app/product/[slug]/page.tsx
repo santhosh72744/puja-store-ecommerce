@@ -1,6 +1,8 @@
 
 'use client';
 
+import { apiUrl } from "@/app/lib/api";
+
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
@@ -48,7 +50,7 @@ export default function ProductPage(props: PageProps) {
     async function load() {
     
       const res = await fetch(
-        `http://localhost:3000/products/${encodeURIComponent(slug)}`,
+        apiUrl(`/products/${encodeURIComponent(slug)}`),
         { cache: 'no-store' },
       );
       if (!res.ok) {
@@ -58,8 +60,8 @@ export default function ProductPage(props: PageProps) {
       const data: Product = await res.json();
       setProduct(data);
 
-      const thumb = data.thumbnail ? `http://localhost:3000${data.thumbnail}` : null;
-      const extras = data.images?.map((img) => `http://localhost:3000${img}`) ?? [];
+      const thumb = data.thumbnail ? apiUrl(data.thumbnail) : null;
+      const extras = data.images?.map((img) => apiUrl(img)) ?? [];
       const all = [...(thumb ? [thumb] : []), ...extras.filter((url) => url !== thumb)];
 
       setActiveImage(all[0] ?? null);
@@ -78,9 +80,8 @@ export default function ProductPage(props: PageProps) {
 
   const currencySymbol = product.currency === 'USD' ? '$' : '₹';
 
-  const thumbnailUrl = product.thumbnail ? `http://localhost:3000${product.thumbnail}` : null;
-  const galleryUrls = product.images?.map((img) => `http://localhost:3000${img}`) ?? [];
-
+  const thumbnailUrl = product.thumbnail ? apiUrl(product.thumbnail) : null;
+  const galleryUrls = product.images?.map((img) => apiUrl(img)) ?? [];
   const bottomImages = [
     ...(thumbnailUrl ? [thumbnailUrl] : []),
     ...galleryUrls.filter((url) => url !== thumbnailUrl),

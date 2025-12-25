@@ -1,6 +1,8 @@
 // src/app/category/[id]/page.tsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { apiUrl } from "@/app/lib/api";
+
 
 type Product = {
   id: string;
@@ -15,9 +17,10 @@ type Product = {
 
 async function getProductsByCategory(id: string): Promise<Product[]> {
   const res = await fetch(
-    `http://localhost:3000/products?category=${encodeURIComponent(id)}`,
-    { cache: 'no-store' },
-  );
+  apiUrl(`/products?category=${encodeURIComponent(id)}`),
+  { cache: 'no-store' },
+);
+
   if (!res.ok) throw new Error('Failed to fetch products');
   return res.json();
 }
@@ -65,12 +68,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <div className="relative h-56 w-full bg-slate-100">
                     {p.thumbnail && (
                       <Image
-                        src={`http://localhost:3000${p.thumbnail}`}
-                        alt={p.name}
-                        fill
-                        className="object-contain bg-white"
-                        unoptimized
-                      />
+                    src={apiUrl(p.thumbnail)}
+                     alt={p.name}
+                     fill
+                    className="object-contain bg-white"
+                    unoptimized
+                     />
+
+
                     )}
                   </div>
 

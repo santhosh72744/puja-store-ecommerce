@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { apiUrl } from '@/app/lib/api';
 
 type Category = {
   id: string;
@@ -10,8 +11,6 @@ type Category = {
   name: string;
   description?: string;
 };
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 
 export default function CategoryGrid() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,8 +21,9 @@ export default function CategoryGrid() {
 
     async function load() {
       try {
-        const res = await fetch(`${API_BASE}/categories`);
+        const res = await fetch(apiUrl('/categories'));
         if (!res.ok) return;
+
         const data = await res.json();
         if (!cancelled) {
           setCategories(data);
@@ -45,7 +45,7 @@ export default function CategoryGrid() {
   }, []);
 
   if (loading && categories.length === 0) {
-    return null; // or a small skeleton loader if you want
+    return null;
   }
 
   return (
