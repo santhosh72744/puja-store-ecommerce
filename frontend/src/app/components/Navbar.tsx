@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useCart } from '../hooks/useCart';
 
-export default function Navbar() {
+function NavbarContent() {
   const pathname = usePathname();
+
   // render only on home page
   if (pathname !== '/') {
     return null;
@@ -95,5 +96,13 @@ export default function Navbar() {
         </div>
       </nav>
     </header>
+  );
+}
+
+export default function Navbar() {
+  return (
+    <Suspense fallback={null}>
+      <NavbarContent />
+    </Suspense>
   );
 }

@@ -8,9 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3001',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  });
+  origin: process.env.CLIENT_URL,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+});
+
 
   // serve /uploads as static files
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
@@ -18,7 +20,8 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-  await app.listen(port);
+ await app.listen(port, '0.0.0.0');
+
   console.log(`Nest app listening on port ${port}`);
 }
 bootstrap();

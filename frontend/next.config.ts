@@ -1,6 +1,5 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+// next.config.ts
+const nextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns: [
@@ -12,6 +11,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // No turbopack flag here
 };
 
 export default nextConfig;
