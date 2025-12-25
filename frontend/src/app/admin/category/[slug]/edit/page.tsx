@@ -27,7 +27,8 @@ export default function EditCategoryPage() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(`http://localhost:3000/categories/${slug}`);
+        const res = await fetch(`/api/categories/${slug}`);
+
         if (!res.ok) throw new Error('Failed to load category');
         const data: Category = await res.json();
         setCategory(data);
@@ -48,7 +49,7 @@ export default function EditCategoryPage() {
     if (!category) return;
     setSaving(true);
     try {
-      const res = await fetch(`http://localhost:3000/categories/${category.id}`, {
+      const res = await fetch(`/api/categories/${category.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, slug: newSlug, description }),
@@ -70,7 +71,7 @@ export default function EditCategoryPage() {
 
     setDeleting(true);
     try {
-      const res = await fetch(`http://localhost:3000/categories/${category.id}`, {
+      const res = await fetch(`/api/categories/${category.id}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete');

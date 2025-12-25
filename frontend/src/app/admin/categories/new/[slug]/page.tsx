@@ -17,18 +17,22 @@ type Product = {
 };
 
 async function getCategory(slug: string): Promise<Category | null> {
-  const res = await fetch(`http://localhost:3000/categories/${slug}`, {
-    cache: 'no-store',
-  });
+  const res = await fetch(`/api/categories/${slug}`, {
+  cache: 'no-store',
+});
+
+
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getProducts(slug: string): Promise<Product[]> {
   const res = await fetch(
-    `http://localhost:3000/products?category=${encodeURIComponent(slug)}`,
-    { cache: 'no-store' },
-  );
+  `/api/products?category=${encodeURIComponent(slug)}`,
+  { cache: 'no-store' },
+);
+
+
   if (!res.ok) return [];
   return res.json();
 }

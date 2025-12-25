@@ -17,7 +17,8 @@ type Cart = {
   items: CartItem[];
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? '/api';
+
 
 function getOrCreateCartToken() {
   if (typeof window === 'undefined') return '';

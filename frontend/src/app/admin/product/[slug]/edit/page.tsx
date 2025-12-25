@@ -63,8 +63,9 @@ export default function EditProductPage() {
   useEffect(() => {
     async function load() {
       const res = await fetch(
-        `http://localhost:3000/products/${encodeURIComponent(slugParam)}`,
-      );
+  `/api/products/${encodeURIComponent(slugParam)}`,
+);
+
       if (!res.ok) {
         setLoading(false);
         return;
@@ -98,7 +99,8 @@ export default function EditProductPage() {
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return path;
     }
-    return `http://localhost:3000${path.startsWith('/') ? path : `/${path}`}`;
+    return `/api${path.startsWith('/') ? path : `/${path}`}`;
+
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -125,9 +127,10 @@ export default function EditProductPage() {
         }
 
         const uploadRes = await fetch(
-          'http://localhost:3000/upload/product-images',
-          { method: 'POST', body: formData },
-        );
+  '/api/upload/product-images',
+  { method: 'POST', body: formData },
+);
+
         if (!uploadRes.ok) throw new Error('Image upload failed');
         const data: UploadResponse = await uploadRes.json();
         if (data.thumbnail) thumbnailPath = data.thumbnail;
@@ -138,8 +141,8 @@ export default function EditProductPage() {
 
       // PATCH product by id
       const updateRes = await fetch(
-        `http://localhost:3000/products/${productId}`,
-        {
+  `/api/products/${productId}`,
+  {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

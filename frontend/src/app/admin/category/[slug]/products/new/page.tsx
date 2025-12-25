@@ -95,8 +95,8 @@ export default function NewProductPage() {
         }
 
         const uploadRes = await fetch(
-          'http://localhost:3000/upload/product-images',
-          {
+  '/api/upload/product-images',
+  {
             method: 'POST',
             body: formData,
           },
@@ -112,7 +112,7 @@ export default function NewProductPage() {
       }
 
       // 2) create product row
-      const createRes = await fetch('http://localhost:3000/products', {
+      const createRes = await fetch('/api/products',  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

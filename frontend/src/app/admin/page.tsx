@@ -9,9 +9,10 @@ type Category = {
 };
 
 async function getCategories(): Promise<Category[]> {
-  const res = await fetch('http://localhost:3000/categories', {
-    cache: 'no-store',
-  });
+  const res = await fetch('/api/categories', {
+  cache: 'no-store',
+});
+
   if (!res.ok) {
     return [];
   }
