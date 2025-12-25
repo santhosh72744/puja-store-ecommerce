@@ -12,7 +12,7 @@ import * as fs from 'fs';
 
 const uploadDir = join(process.cwd(), 'public', 'uploads', 'products');
 
-// Ensure directory exists at app start
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

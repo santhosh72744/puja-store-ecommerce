@@ -5,7 +5,7 @@ export class Category {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // ids you already use in frontend like "kits", "idols"
+
   @Column({ unique: true })
   slug: string;
 

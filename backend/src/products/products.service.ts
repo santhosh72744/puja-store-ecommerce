@@ -28,7 +28,7 @@ export class ProductsService {
     return this.repo.find({ order: { name: 'ASC' } });
   }
 
-  // by id (used in admin, keep)
+
   async findOne(id: string) {
     const product = await this.repo.findOne({ where: { id } });
     if (!product) {
@@ -37,7 +37,7 @@ export class ProductsService {
     return product;
   }
 
-  // NEW: by slug (used in customer product page)
+
   async findOneBySlug(slug: string) {
     const product = await this.repo.findOne({ where: { slug } });
     if (!product) {

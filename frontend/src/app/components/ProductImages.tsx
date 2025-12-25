@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 type ProductImagesProps = {
-  // Pass an array of image URLs from your API / DB
+
   images: string[];
 };
 
@@ -25,9 +25,9 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
 
   return (
     <div className="flex gap-8">
-      {/* LEFT: main image + thumbnails */}
+    
       <div>
-        {/* main image (hover area) */}
+    
         <div
           className="w-[350px] h-[350px] overflow-hidden rounded-xl bg-gray-100 cursor-crosshair"
           onMouseEnter={() => setIsHovering(true)}
@@ -64,7 +64,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
         </div>
       </div>
 
-      {/* RIGHT: zoom panel OR product info */}
+    
       <div className="flex-1">
         {isHovering ? (
           // zoom panel (shows only while hovering left image)
@@ -79,7 +79,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
             />
           </div>
         ) : (
-          // normal product content when not hovering
+         
           <div className="space-y-3">
             <h1 className="text-xl font-semibold">
               Product title goes here

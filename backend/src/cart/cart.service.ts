@@ -53,9 +53,8 @@ export class CartService {
     return this.getCartWithItems(cartToken);
   }
 
-  // ===== NEW METHODS FOR + / − =====
 
-  // Increase quantity of a specific cart item by 1 (or custom delta)
+  
   async increaseItemQuantity(itemId: string, delta = 1) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -66,7 +65,7 @@ export class CartService {
     return this.getCartWithItemsById(item.cartId);
   }
 
-  // Decrease quantity; if it becomes 0 or less, remove the item
+ 
   async decreaseItemQuantity(itemId: string, delta = 1) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -83,7 +82,7 @@ export class CartService {
     return this.getCartWithItemsById(item.cartId);
   }
 
-  // Remove an item directly (optional helper)
+  
   async removeItem(itemId: string) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -93,7 +92,7 @@ export class CartService {
     return this.getCartWithItemsById(cartId);
   }
 
-  // ===== INTERNAL HELPERS =====
+ 
 
   private async getCartWithItems(cartToken: string) {
     return this.cartRepo.findOne({

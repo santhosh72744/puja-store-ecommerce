@@ -90,7 +90,7 @@ export default function OffersCarousel() {
           </div>
         ))}
 
-        {/* Height placeholder (keeps layout from jumping) */}
+    
         <div className="invisible">
           <div className="h-[260px] md:h-[320px] lg:h-[360px]" />
         </div>

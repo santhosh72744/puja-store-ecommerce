@@ -13,18 +13,18 @@ import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
-    // Global env config (.env at backend root)
+    
     ConfigModule.forRoot({
       isGlobal: true,
     }),
 
-    // Serve static files (for product images)
+ 
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
       serveRoot: '/', // files under public are available at http://localhost:4000/<path>
     }),
 
-    // PostgreSQL + TypeORM using env variables
+ 
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',

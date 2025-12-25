@@ -1,4 +1,4 @@
-// src/app/product/[slug]/page.tsx
+
 'use client';
 
 import Image from 'next/image';
@@ -26,12 +26,12 @@ type Product = {
 };
 
 type PageProps = {
-  // Next.js 15 treats params as a Promise
+
   params: Promise<{ slug: string }>;
 };
 
 export default function ProductPage(props: PageProps) {
-  // Unwrap params with React.use (sync dynamic API)
+
   const { slug } = (React as any).use(props.params) as { slug: string };
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -46,7 +46,7 @@ export default function ProductPage(props: PageProps) {
 
   useEffect(() => {
     async function load() {
-      // IMPORTANT: matches @Get(':slug') in ProductsController
+    
       const res = await fetch(
         `http://localhost:3000/products/${encodeURIComponent(slug)}`,
         { cache: 'no-store' },
@@ -332,7 +332,7 @@ export default function ProductPage(props: PageProps) {
           </div>
         </div>
 
-        {/* FULLSCREEN LIGHTBOX */}
+        
         {isOpen && (
           <div
             className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
