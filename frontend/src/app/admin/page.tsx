@@ -9,11 +9,13 @@ type Category = {
 };
 
 async function getCategories(): Promise<Category[]> {
-  const res = await fetch('/api/categories', {
-  cache: 'no-store',
-});
+  const res = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/categories`,
+  { cache: 'no-store' }
+);
 
-  if (!res.ok) {
+
+  if (!res.ok) { 
     return [];
   }
   return res.json();
